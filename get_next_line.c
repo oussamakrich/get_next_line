@@ -6,11 +6,12 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 11:08:28 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/07 16:59:55 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/07 19:04:09 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <unistd.h>
 
 int	check_newline(char *reader)
 {
@@ -28,43 +29,49 @@ int	check_newline(char *reader)
 	return (i);
 }
 
+int rest_line(char **line, char **rest)
+{
+	int pos;
+
+	if (*line == NULL)
+		return 0;
+	pos = check_newline(*line);
+	if (pos != -1)
+	{
+		*line = ft_substr(*line, 0, pos + 1);
+		*rest = ft_substr(*rest , pos + 1, ft_strlen(*rest) - pos);
+		return 1;
+	}
+	return 0;
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*rest;
 	char		*reader;
 	char		*line;
 	int			n;
-	int			i;
+	int			pos;
 
 	line = rest;
-	if (line != NULL)
-	{
-		i = check_newline(line);
-		if (i != -1)
-		{
-			line = ft_substr(line, 0, i + 1);
-			rest = ft_substr(rest , i + 1, ft_strlen(rest) - i);
-			return (line);
-		}
-	}
+	if (rest_line(&line, &rest))
+		return (line);
 	reader = malloc(BUFFER_SIZE + 1);
 	if (reader == NULL)
 		return (NULL);
-	n = read(fd, reader, BUFFER_SIZE);
-	if (n <= 0)
-		return (NULL);
-	reader[BUFFER_SIZE] = '\0';
-	i = check_newline(reader);
-	while(i == -1 || n <= 0)
+	while (1)
 	{
+		n = read(fd, reader, BUFFER_SIZE);
+		reader[BUFFER_SIZE] = '\0';
+		pos = check_newline(reader);
+		if (pos != -1 || n == 0)
+			break ;
 		line = ft_strjoin(line, reader);
-		n = read(fd , reader, BUFFER_SIZE);
-		i = check_newline(reader);
 	}
-	if (i != -1)
+	if (pos != -1)
 	{
-		line = ft_strljoin(line, reader, i + 1);
-		rest = ft_substr(reader, i + 1, ft_strlen(reader));
+		line = ft_strljoin(line, reader, pos + 1);
+		rest = ft_substr(reader, pos + 1, ft_strlen(reader));
 	}
 	free(reader);
 	return (line);

@@ -15,8 +15,8 @@
 #include <unistd.h>
 
 
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strljoin(char *s1, char *s2, int i);
+void	ft_free(char **ptr);
+char	*ft_strnjoin(char *s1, char *s2, int i);
 char	*ft_strdup(char *s1);
 size_t	ft_strlen(char *str);
 char	*ft_substr(char *s, unsigned int start, size_t len);

@@ -6,11 +6,12 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 11:08:28 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/08 19:36:37 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/08 22:00:06 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -32,7 +33,6 @@ int	check_newline(char *reader)
 
 int	bring_line(char **reader, char **rest, char **line)
 {
-
 	int		pos;
 	char	*tmp;
 
@@ -76,6 +76,7 @@ char	*get_next_line(int fd)
 	int			n;
 
 	n = 1;
+	line = rest;
 	if (bring_restofline(&line, &rest))
 		return (line);
 	reader = malloc(BUFFER_SIZE + 1);

@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/09 10:19:58 by okrich            #+#    #+#             */
+/*   Updated: 2022/11/09 15:52:56 by okrich           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
@@ -18,7 +31,9 @@
 void	ft_free(char **ptr);
 char	*ft_strnjoin(char *s1, char *s2, int i);
 char	*ft_strdup(char *s1);
-size_t	ft_strlen(char *str);
-char	*ft_substr(char *s, unsigned int start, size_t len);
+char	*ft_strndup(char *s1, int n);
+int		ft_strlen(char *str);
+char	*ft_substr(char *s, int start, int len);
 
 #endif
+

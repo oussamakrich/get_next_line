@@ -5,18 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/08 11:55:11 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/08 21:59:58 by okrich           ###   ########.fr       */
+/*   Created: 2022/11/09 10:13:04 by okrich            #+#    #+#             */
+/*   Updated: 2022/11/10 15:26:56 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stddef.h>
-#include <stdlib.h>
 
-size_t	ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	if (str == NULL)
@@ -26,10 +24,10 @@ size_t	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strncpy(char *dst, char *src, size_t dstsize)
+char	*ft_strncpy(char *dst, char *src, int dstsize)
 {
 	int		j;
-	size_t	i;
+	int		i;
 
 	i = ft_strlen(src);
 	if (dstsize == 0)
@@ -47,7 +45,7 @@ char	*ft_strncpy(char *dst, char *src, size_t dstsize)
 char	*ft_strnjoin(char *s1, char *s2, int i)
 {
 	char	*join;
-	size_t	len;
+	int		len;
 
 	len = ft_strlen(s1);
 	join = malloc(sizeof(char) * (len + i + 1));
@@ -59,19 +57,20 @@ char	*ft_strnjoin(char *s1, char *s2, int i)
 	return (join);
 }
 
-char	*ft_substr(char *s, unsigned int start, size_t len)
-{
-	char	*sub;
-	char	*tmp;
 
-	if (start >= ft_strlen(s))
+char	*ft_strndup(char *s1, int n)
+{
+	int		len;
+	char	*dst;
+
+	len = ft_strlen(s1);
+	if (s1 == NULL)
 		return (NULL);
-	if (len > ft_strlen(s + start))
-		len = ft_strlen(s) - start;
-	tmp = (char *)s + start;
-	sub = malloc(sizeof(char) * (len + 1));
-	if (sub == NULL)
+	dst = malloc(sizeof(char) * (len + 1));
+	if (dst == NULL)
 		return (NULL);
-	ft_strncpy(sub, tmp, len);
-	return (sub);
+	if (n == -1)
+		n = len;
+	ft_strncpy(dst, s1, n);
+	return (dst);
 }

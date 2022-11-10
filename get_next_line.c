@@ -5,22 +5,49 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/05 11:08:28 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/08 22:00:06 by okrich           ###   ########.fr       */
+/*   Created: 2022/11/09 10:22:01 by okrich            #+#    #+#             */
+/*   Updated: 2022/11/10 16:22:43 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// int	get_line(char **line, char **reader)
+// {
+// 	int pos;
+//
+// 	pos = check_newline(*reader);
+// 	if (pos != -1)
+// 	{
+// 		*line = ft_strnjoin(*line, *reader, pos + 1);
+// 		return (1);
+// 	}
+// 	else
+// 		*line = ft_strnjoin(*line, *reader, ft_strlen(*reader));
+// 	return (0);
+// }
+//
+// char	*get_rest(char *reader)
+// {
+// 	int		pos;
+// 	char	*rest;
+//
+// 	pos = check_newline(reader);
+// 	rest = ft_substr(reader, pos + 1, ft_strlen(reader));
+// 	return (rest);
+// }
+//
 #include "get_next_line.h"
-#include <stdio.h>
 #include <stdlib.h>
+#include <sys/fcntl.h>
 #include <unistd.h>
 
 int	check_newline(char *reader)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(reader[i] != '\0')
+	if (reader == NULL)
+		return (-1);
+	while (reader[i] != '\0')
 	{
 		if (reader[i] == '\n')
 			break ;
@@ -28,79 +55,68 @@ int	check_newline(char *reader)
 	}
 	if (reader[i] == '\0')
 		return (-1);
-	return (i);
+	return (i + 1);
 }
 
-int	bring_line(char **reader, char **rest, char **line)
+char	*get_resteofline(int n, char **rest, char *line)
 {
-	int		pos;
 	char	*tmp;
 
-	pos = check_newline(*reader);
-	if (pos != -1)
-	{
-		*line = ft_strnjoin(*line, *reader, pos + 1);
-		tmp = ft_substr(*reader, pos + 1, ft_strlen(*reader));
-		free(*rest);
-		*rest = tmp;
-		return (1);
-	}
-	*line = ft_strnjoin(*line, *reader, ft_strlen(*reader));
-	return (0);
+	line = ft_strndup(*rest, n);
+	tmp = ft_strndup(*rest + n, -1);
+	free(*rest);
+	*rest = tmp;
+	return (line);
 }
 
-int bring_restofline(char **line, char **rest)
+int	read_and_get_line(int fd, char **line, char **rest)
 {
+	char	*reader;
+	int		n;
 	int		pos;
-	char	*tmp;
 
-	if (*rest == NULL)
-		return 0;
-	pos = check_newline(*rest);
-	if (pos != -1)
-	{
-		*line = ft_substr(*rest, 0, pos + 1);
-		tmp = ft_substr(*rest , pos + 1, ft_strlen(*rest) - pos);
-		free(*rest);
-		*rest = tmp;
-		return 1;
-	}
-	return 0;
-}
-
-char	*get_next_line(int fd)
-{
-	static char	*rest;
-	char		*reader;
-	char		*line;
-	int			n;
-
-	n = 1;
-	line = rest;
-	if (bring_restofline(&line, &rest))
-		return (line);
-	reader = malloc(BUFFER_SIZE + 1);
+	reader = malloc(BUFFER_SIZE);
 	if (reader == NULL)
-		return (NULL);
+		return (0);
+	n = 1;
 	while (n > 0)
 	{
 		n = read(fd, reader, BUFFER_SIZE);
 		reader[n] = '\0';
 		if (n <= 0)
 			break ;
-		if (bring_line(&reader, &rest, &line))
+		pos = check_newline(reader);
+		if (pos != -1)
+		{
+			*line = ft_strnjoin(*line, reader, pos);
+			if (pos < n)
+				*rest = ft_strndup(reader + pos, -1);
 			break ;
+		}
+		*line = ft_strnjoin(*line, reader, n);
 	}
-	if (n == -1)
-	{
-		free(reader);
-		return (NULL);
-	}
-	free(reader);
-	return (line);
+	return (free(reader), n);
 }
 
+char	*get_next_line(int fd)
+{
+	static char	*rest;
+	char		*line;
+	ssize_t		n;
 
+	n = check_newline(rest);
+	if (rest != NULL && n != -1)
+	{		
+		line = get_resteofline(n, &rest, line);
+		return (line);
+	}
+	line = rest;
+	rest = NULL;
+	n = read_and_get_line(fd, &line, &rest);
+	if (n == -1)
+		return (free(line), NULL);
+	return (line);
+}
 void my_exit()
 {
 	system("leaks a.out");

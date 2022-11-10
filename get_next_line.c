@@ -6,35 +6,10 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:22:01 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/10 16:22:43 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/10 16:33:15 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// int	get_line(char **line, char **reader)
-// {
-// 	int pos;
-//
-// 	pos = check_newline(*reader);
-// 	if (pos != -1)
-// 	{
-// 		*line = ft_strnjoin(*line, *reader, pos + 1);
-// 		return (1);
-// 	}
-// 	else
-// 		*line = ft_strnjoin(*line, *reader, ft_strlen(*reader));
-// 	return (0);
-// }
-//
-// char	*get_rest(char *reader)
-// {
-// 	int		pos;
-// 	char	*rest;
-//
-// 	pos = check_newline(reader);
-// 	rest = ft_substr(reader, pos + 1, ft_strlen(reader));
-// 	return (rest);
-// }
-//
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <sys/fcntl.h>

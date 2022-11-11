@@ -6,12 +6,11 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 15:23:45 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/11 20:15:22 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/11 20:24:39 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <sys/_types/_ssize_t.h>
 
 static ssize_t	check_newline(char *reader)
 {

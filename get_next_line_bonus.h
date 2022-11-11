@@ -6,7 +6,7 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 16:54:45 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/11 17:51:15 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/11 20:17:53 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 
 # include <sys/fcntl.h>
 # include <stddef.h>
+# include <sys/_types/_ssize_t.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <sys/fcntl.h>
 # include <sys/syslimits.h>
+# include <limits.h>
 
-void	ft_free(char **ptr);
-char	*ft_strnjoin(char *s1, char *s2, int i);
-char	*ft_strdup(char *s1);
-char	*ft_strndup(char *s1, int n);
-int		ft_strlen(char *str);
-char	*ft_substr(char *s, int start, int len);
+char	*ft_strnjoin(char *s1, char *s2, ssize_t i);
+char	*ft_strndup(char *s1, ssize_t n);
 char	*get_next_line(int fd);
+ssize_t	ft_strlen(char *str);
 
 #endif

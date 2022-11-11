@@ -6,15 +6,15 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 16:55:23 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/11 16:55:48 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/11 20:20:35 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-int	ft_strlen(char *str)
+ssize_t	ft_strlen(char *str)
 {
-	int	i;
+	ssize_t	i;
 
 	i = 0;
 	if (str == NULL)
@@ -24,10 +24,10 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strncpy(char *dst, char *src, int dstsize)
+char	*ft_strncpy(char *dst, char *src, ssize_t dstsize)
 {
-	int		j;
-	int		i;
+	ssize_t	j;
+	ssize_t	i;
 
 	i = ft_strlen(src);
 	if (dstsize == 0)
@@ -42,10 +42,10 @@ char	*ft_strncpy(char *dst, char *src, int dstsize)
 	return (dst);
 }
 
-char	*ft_strnjoin(char *s1, char *s2, int i)
+char	*ft_strnjoin(char *s1, char *s2, ssize_t i)
 {
 	char	*join;
-	int		len;
+	ssize_t	len;
 
 	len = ft_strlen(s1);
 	join = malloc(sizeof(char) * (len + i + 1));
@@ -57,9 +57,9 @@ char	*ft_strnjoin(char *s1, char *s2, int i)
 	return (join);
 }
 
-char	*ft_strndup(char *s1, int n)
+char	*ft_strndup(char *s1, ssize_t n)
 {
-	int		len;
+	ssize_t	len;
 	char	*dst;
 
 	len = ft_strlen(s1);
@@ -73,4 +73,3 @@ char	*ft_strndup(char *s1, int n)
 	ft_strncpy(dst, s1, n);
 	return (dst);
 }
-

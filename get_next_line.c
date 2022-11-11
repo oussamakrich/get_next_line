@@ -6,15 +6,15 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:22:01 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/11 15:18:52 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/11 20:21:13 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	check_newline(char *reader)
+static ssize_t	check_newline(char *reader)
 {
-	int	i;
+	ssize_t	i;
 
 	i = 0;
 	if (reader == NULL)
@@ -30,7 +30,7 @@ int	check_newline(char *reader)
 	return (i + 1);
 }
 
-char	*get_resteofline(int n, char **rest, char *line)
+static char	*get_resteofline(ssize_t n, char **rest, char *line)
 {
 	char	*tmp;
 
@@ -41,6 +41,8 @@ char	*get_resteofline(int n, char **rest, char *line)
 	{
 		tmp = ft_strndup(*rest + n, -1);
 		free(*rest);
+		if (tmp == NULL)
+			return (NULL);
 		*rest = tmp;
 	}
 	else
@@ -51,16 +53,14 @@ char	*get_resteofline(int n, char **rest, char *line)
 	return (line);
 }
 
-int	read_and_get_line(int fd, char **line, char **rest)
+static	ssize_t	read_and_get_line(ssize_t	n, int fd, char **line, char **rest)
 {
 	char	*reader;
-	int		n;
-	int		pos;
+	ssize_t	pos;
 
 	reader = malloc(BUFFER_SIZE + 1);
 	if (reader == NULL)
 		return (0);
-	n = 1;
 	while (n > 0)
 	{
 		n = read(fd, reader, BUFFER_SIZE);
@@ -76,6 +76,8 @@ int	read_and_get_line(int fd, char **line, char **rest)
 			break ;
 		}
 		*line = ft_strnjoin(*line, reader, n);
+		if (*line == NULL)
+			break ;
 	}
 	return (free(reader), n);
 }
@@ -95,26 +97,8 @@ char	*get_next_line(int fd)
 	}
 	line = rest;
 	rest = NULL;
-	n = read_and_get_line(fd, &line, &rest);
+	n = read_and_get_line(1, fd, &line, &rest);
 	if (n == -1)
 		return (free(line), NULL);
 	return (line);
 }
-//
-// void my_exit()
-// {
-// 	system("leaks a.out");
-// }
-//
-// int main()
-// {
-// 	int fd =  open("lines_10.txt",O_RDONLY);
-// 	char *str;
-// 	while((str = get_next_line(fd)))
-// 	{
-// 		printf("%s",str);
-// 		free(str);
-// 	}
-// 	printf("%s", str);
-// 	// atexit(my_exit);
-// }

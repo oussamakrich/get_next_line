@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/09 10:22:01 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/11 15:18:52 by okrich           ###   ########.fr       */
+/*   Created: 2022/11/11 15:23:45 by okrich            #+#    #+#             */
+/*   Updated: 2022/11/11 17:19:54 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
+#include <sys/fcntl.h>
+#include <sys/syslimits.h>
 
-int	check_newline(char *reader)
+static int	check_newline(char *reader)
 {
 	int	i;
 
@@ -30,7 +32,7 @@ int	check_newline(char *reader)
 	return (i + 1);
 }
 
-char	*get_resteofline(int n, char **rest, char *line)
+static char	*get_resteofline(int n, char **rest, char *line)
 {
 	char	*tmp;
 
@@ -51,36 +53,36 @@ char	*get_resteofline(int n, char **rest, char *line)
 	return (line);
 }
 
-int	read_and_get_line(int fd, char **line, char **rest)
+static int	read_and_get_line(int fd, char **line, char **rest)
 {
-	char	*reader;
+	char	*reader[OPEN_MAX];
 	int		n;
 	int		pos;
 
-	reader = malloc(BUFFER_SIZE + 1);
-	if (reader == NULL)
+	reader[fd] = malloc(BUFFER_SIZE + 1);
+	if (reader[fd] == NULL)
 		return (0);
 	n = 1;
 	while (n > 0)
 	{
-		n = read(fd, reader, BUFFER_SIZE);
+		n = read(fd, reader[fd], BUFFER_SIZE);
 		if (n <= 0)
 			break ;
-		reader[n] = '\0';
-		pos = check_newline(reader);
+		reader[fd][n] = '\0';
+		pos = check_newline(reader[fd]);
 		if (pos != -1)
 		{
-			*line = ft_strnjoin(*line, reader, pos);
+			*line = ft_strnjoin(*line, reader[fd], pos);
 			if (pos < n && *line != NULL)
-				*rest = ft_strndup(reader + pos, -1);
+				*rest = ft_strndup(reader[fd] + pos, -1);
 			break ;
 		}
-		*line = ft_strnjoin(*line, reader, n);
+		*line = ft_strnjoin(*line, reader[fd], n);
 	}
-	return (free(reader), n);
+	return (free(reader[fd]), n);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line_bonus(int fd)
 {
 	static char	*rest;
 	char		*line;
@@ -108,13 +110,16 @@ char	*get_next_line(int fd)
 //
 // int main()
 // {
-// 	int fd =  open("lines_10.txt",O_RDONLY);
+// 	int fd =  open("txt1",O_RDONLY);
+// 	int fd2 = open("txt2",O_RDONLY);
 // 	char *str;
-// 	while((str = get_next_line(fd)))
+// 	char *str2;
+// 	while((str = get_next_line_bonus(fd)) && (str2 = get_next_line_bonus(fd2)))
 // 	{
+// 		printf("%s",str2);
 // 		printf("%s",str);
 // 		free(str);
+// 		free(str2);
 // 	}
-// 	printf("%s", str);
-// 	// atexit(my_exit);
+// 	atexit(my_exit);
 // }

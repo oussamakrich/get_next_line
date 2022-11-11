@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/09 10:13:04 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/10 17:36:02 by okrich           ###   ########.fr       */
+/*   Created: 2022/11/11 16:55:23 by okrich            #+#    #+#             */
+/*   Updated: 2022/11/11 16:55:48 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	ft_strlen(char *str)
 {
@@ -73,3 +73,4 @@ char	*ft_strndup(char *s1, int n)
 	ft_strncpy(dst, s1, n);
 	return (dst);
 }
+

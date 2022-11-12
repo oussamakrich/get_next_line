@@ -6,7 +6,7 @@
 /*   By: okrich <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 15:23:45 by okrich            #+#    #+#             */
-/*   Updated: 2022/11/11 20:24:39 by okrich           ###   ########.fr       */
+/*   Updated: 2022/11/12 17:11:19 by okrich           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ static ssize_t	check_newline(char *reader)
 	return (i + 1);
 }
 
-static char	*get_resteofline(ssize_t n, char **rest, char *line)
+static char	*get_resteofline(ssize_t n, char **rest)
 {
 	char	*tmp;
+	char	*line;
 
 	line = ft_strndup(*rest, n);
 	if (line == NULL)
@@ -88,13 +89,13 @@ char	*get_next_line(int fd)
 	char		*line[OPEN_MAX];
 	ssize_t		n;
 
-	if (fd < 0 || fd > OPEN_MAX)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE < 0)
 		return (NULL);
 	line[fd] = NULL;
 	n = check_newline(rest[fd]);
 	if (rest[fd] != NULL && n != -1)
 	{		
-		line[fd] = get_resteofline(n, &rest[fd], line[fd]);
+		line[fd] = get_resteofline(n, &rest[fd]);
 		return (line[fd]);
 	}
 	line[fd] = rest[fd];
